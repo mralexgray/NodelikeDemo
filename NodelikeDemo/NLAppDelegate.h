@@ -12,6 +12,6 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
-- (NSString *)execute:(NSString *)cmd;
+- (NSString*) execute:(NSString*)cmd;
 
 @end

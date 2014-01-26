@@ -8,29 +8,18 @@
 
 #import "NLViewController.h"
 
-@interface NLViewController ()
-
-@end
-
 @implementation NLViewController
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    _appDelegate = [[UIApplication sharedApplication] delegate];
-	// Do any additional setup after loading the view, typically from a nib.
+- (void) viewDidLoad	{  [super viewDidLoad];
+
+    _appDelegate = UIApplication.sharedApplication.delegate;
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+- (void) didReceiveMemoryWarning	{ [super didReceiveMemoryWarning]; }
 
-- (IBAction)execute:(id)sender {
-    NSLog(@"execute");
-    NSString *input = _output.text;
-    _state.text = [@"_ = " stringByAppendingString:[_appDelegate execute:input]];
+- (IBAction) execute:(id)sender { NSLog(@"execute");
+
+    _state.text = [@"_ = " stringByAppendingString:[_appDelegate execute:_output.text]];
     _output.text = @"";
 }
 

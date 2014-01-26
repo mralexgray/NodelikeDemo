@@ -17,7 +17,7 @@
 
 @implementation NLBindingConstants
 
-- (id)binding {
+- (id) binding {
     NSMutableDictionary *constants = [[NSMutableDictionary alloc] init];
     [NLBindingConstants defineErrnoConstants: constants];
     [NLBindingConstants defineSignalConstants:constants];
@@ -28,7 +28,7 @@
 #define NODE_DEFINE_CONSTANT(target, constant) \
     [target setObject:[NSNumber numberWithInt:constant] forKey:@#constant]
 
-+ (void)defineErrnoConstants:(NSMutableDictionary *)target {
++ (void)defineErrnoConstants:(NSMutableDictionary*)target {
 
 #ifdef E2BIG
     NODE_DEFINE_CONSTANT(target, E2BIG);
@@ -348,7 +348,7 @@
 
 }
 
-+ (void)defineSignalConstants:(NSMutableDictionary *)target {
++ (void)defineSignalConstants:(NSMutableDictionary*)target {
 
 #ifdef SIGHUP
     NODE_DEFINE_CONSTANT(target, SIGHUP);
@@ -495,7 +495,7 @@
 
 }
 
-+ (void)defineSystemConstants:(NSMutableDictionary *)target {
++ (void)defineSystemConstants:(NSMutableDictionary*)target {
 
     // file access modes
     NODE_DEFINE_CONSTANT(target, O_RDONLY);

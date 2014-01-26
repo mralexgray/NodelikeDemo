@@ -10,19 +10,19 @@
 
 @implementation NLBindingBuffer
 
-- (id)binding {
+- (id) binding {
     return @{@"setupBufferJS": ^(JSValue *target, JSValue *internal) {
         [self setupBufferJS:target internal:internal];}};
 }
 
-+ (NSNumber *)writeString:(NSString *)str toBuffer:(JSValue *)target atOffset:(JSValue *)off withLength:(JSValue *)len {
++ (NSNumber*)writeString:(NSString*)str toBuffer:(JSValue*)target atOffset:(JSValue*)off withLength:(JSValue*)len {
     
     NSData *data = [str dataUsingEncoding:NSUTF8StringEncoding];
     return [NLBindingBuffer writeData:data toBuffer:target atOffset:off withLength:len];
 
 }
 
-+ (NSNumber *)writeData:(NSData *)data toBuffer:(JSValue *)target atOffset:(JSValue *)off withLength:(JSValue *)len {
++ (NSNumber*)writeData:(NSData*)data toBuffer:(JSValue*)target atOffset:(JSValue*)off withLength:(JSValue*)len {
     
     size_t obj_length = [target[@"length"] toUInt32];
     
@@ -45,7 +45,7 @@
     
 }
 
-- (void)setupBufferJS:(JSValue *)target internal:(JSValue *)internal {
+- (void) setupBufferJS:(JSValue*)target internal:(JSValue*)internal {
 
     JSValue *proto = target[@"prototype"];
     

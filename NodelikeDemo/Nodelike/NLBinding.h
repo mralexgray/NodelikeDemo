@@ -10,13 +10,11 @@
 #import <JavaScriptCore/JavaScriptCore.h>
 
 #import "uv.h"
-
 #import "NLContext.h"
 
 @interface NLBinding : NSObject
 
-+ (id)bindingForIdentifier:(NSString *)identifier;
-
-- (id)binding;
++ (id) bindingForIdentifier:(NSString*)identifier;
+- (id) binding;
 
 @end

@@ -17,47 +17,29 @@
 
 @implementation NLBinding
 
-+ (NSCache *)bindingCache {
-    static NSCache *cache = nil;
-    static dispatch_once_t token = 0;
-    dispatch_once(&token, ^{
-        cache = [[NSCache alloc] init];
-    });
-    return cache;
-}
++ (NSCache*)bindingCache {
 
-+ (NSDictionary *)bindings {
-    static NSDictionary *bindings = nil;
-    static dispatch_once_t token = 0;
-    dispatch_once(&token, ^{
-        bindings = @{@"fs":         [NLBindingFilesystem class],
-                     @"constants":  [NLBindingConstants  class],
-                     @"smalloc":    [NLBindingSmalloc    class],
-                     @"buffer":     [NLBindingBuffer     class],
-                     @"timer_wrap": [NLBindingTimerWrap  class],
-                     @"cares_wrap": [NLBindingCaresWrap  class]};
-    });
-    return bindings;
+	         static NSCache *cache = nil;	static dispatch_once_t token = 0;
+	dispatch_once(&token, ^{ cache = NSCache.new; });																return cache;
 }
++ (NSDictionary*)bindings {
 
-+ (id)bindingForIdentifier:(NSString *)identifier {
-    NSCache *cache = [NLBinding bindingCache];
-    id binding = [cache objectForKey:identifier];
-    if (binding != nil) {
-        return binding;
-    }
-    Class cls = [NLBinding bindings][identifier];
-    if (cls) {
-        binding = [[[cls alloc] init] binding];
-        [cache setObject:binding forKey:identifier];
-        return binding;
-    } else {
-        return nil;
-    }
+	     static NSDictionary *bindings = nil;  static dispatch_once_t token = 0;
+	dispatch_once(&token, ^{	bindings = @{ @"fs" : NLBindingFilesystem.class,
+																	 @"constants" : NLBindingConstants.class,
+																		 @"smalloc" : NLBindingSmalloc.class,
+																			@"buffer" : NLBindingBuffer.class,
+																	@"timer_wrap" : NLBindingTimerWrap.class,
+																	@"cares_wrap" : NLBindingCaresWrap.class }; });  return bindings;
 }
++ (id)bindingForIdentifier:(NSString*)identifier {     id binding; Class cls;
 
-- (id)binding {
-    return self;
+    NSCache *cache = NLBinding.bindingCache;
+    if (!(binding = [cache objectForKey:identifier]) || !(cls = NLBinding.bindings[identifier])) return nil;
+		binding = [[cls.alloc init]binding];
+		[cache setObject:binding forKey:identifier];
+		return binding;
 }
+- (id)binding { return self; }
 
 @end

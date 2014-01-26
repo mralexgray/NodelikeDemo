@@ -17,6 +17,6 @@
 @property IBOutlet UITextView *output;
 @property IBOutlet UILabel *state;
 
-- (IBAction) execute:(id)sender;
+- (IBAction)  execute:(id)sender;
 
 @end

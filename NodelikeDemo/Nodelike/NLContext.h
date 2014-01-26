@@ -12,24 +12,24 @@
 
 @interface NLContext : JSContext
 
-+ (NLContext *)currentContext;
++ (NLContext*)currentContext;
 
-+ (NLContext *)contextForEventRequest:(void *)req;
++ (NLContext*)contextForEventRequest:(void*)req;
 
-+ (JSValue *)createEventRequestOfType:(uv_req_type)type withCallback:(JSValue *)cb
++ (JSValue*)createEventRequestOfType:(uv_req_type)type withCallback:(JSValue*)cb
                                    do:(void(^)(uv_loop_t *loop, void *req, bool async))task
-                                 then:(void(^)(void *, NLContext *))after;
+                                 then:(void(^)(void *, NLContext*))after;
 
-+ (void)finishEventRequest:(void *)req do:(void(^)(NLContext *context))task;
++ (void)finishEventRequest:(void*)req do:(void(^)(NLContext *context))task;
 
-- (void)callSuccessfulEventRequest:(void *)req;
+- (void) callSuccessfulEventRequest:(void*)req;
 
-- (void)setErrorCode:(int)error forEventRequest:(void *)req;
+- (void) setErrorCode:(int)error forEventRequest:(void*)req;
 
-- (void)setError:(JSValue *)error forEventRequest:(void *)req;
+- (void) setError:(JSValue*)error forEventRequest:(void*)req;
 
-- (void)setValue:(JSValue *)value forEventRequest:(void *)req;
+- (void) setValue:(JSValue*)value forEventRequest:(void*)req;
 
-- (JSValue *)requireModule:(NSString *)module;
+- (JSValue*) requireModule:(NSString*)module;
 
 @end
