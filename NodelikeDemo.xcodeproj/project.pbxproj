@@ -17,8 +17,6 @@
 		7BBDE382181983E700D1A0AC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7BBDE381181983E700D1A0AC /* Images.xcassets */; };
 		7BBDE388181983E700D1A0AC /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5B44661180AB78E009ADEF9 /* XCTest.framework */; };
 		7BBDE389181983E700D1A0AC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BBDE369181983E600D1A0AC /* Cocoa.framework */; };
-		7BBDE391181983E700D1A0AC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7BBDE38F181983E700D1A0AC /* InfoPlist.strings */; };
-		7BBDE393181983E700D1A0AC /* NodelikeMacDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BBDE392181983E700D1A0AC /* NodelikeMacDemoTests.m */; };
 		7BBDE39F1819874000D1A0AC /* _debugger.js in Resources */ = {isa = PBXBuildFile; fileRef = B537A604180C71FF00CEF23D /* _debugger.js */; };
 		7BBDE3A01819874000D1A0AC /* _http_agent.js in Resources */ = {isa = PBXBuildFile; fileRef = B537A605180C71FF00CEF23D /* _http_agent.js */; };
 		7BBDE3A11819874000D1A0AC /* _http_client.js in Resources */ = {isa = PBXBuildFile; fileRef = B537A606180C71FF00CEF23D /* _http_client.js */; };
@@ -104,7 +102,6 @@
 		7BF86D77181987F50067D43E /* NLBindingCaresWrap.m in Sources */ = {isa = PBXBuildFile; fileRef = B5061A391815A9B00083AB4B /* NLBindingCaresWrap.m */; };
 		7BF86D79181988180067D43E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BF86D78181988180067D43E /* Cocoa.framework */; };
 		7BF86D7C181988B50067D43E /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BF86D7A181988700067D43E /* JavaScriptCore.framework */; };
-		B5061A33181595EB0083AB4B /* index.js in Sources */ = {isa = PBXBuildFile; fileRef = B5061A32181595EB0083AB4B /* index.js */; };
 		B5061A34181595FD0083AB4B /* index.js in Resources */ = {isa = PBXBuildFile; fileRef = B5061A32181595EB0083AB4B /* index.js */; };
 		B5061A37181597FE0083AB4B /* NLBindingTimerWrap.m in Sources */ = {isa = PBXBuildFile; fileRef = B5061A36181597FE0083AB4B /* NLBindingTimerWrap.m */; };
 		B5061A3A1815A9B00083AB4B /* NLBindingCaresWrap.m in Sources */ = {isa = PBXBuildFile; fileRef = B5061A391815A9B00083AB4B /* NLBindingCaresWrap.m */; };
@@ -265,9 +262,6 @@
 		7BBDE37F181983E700D1A0AC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		7BBDE381181983E700D1A0AC /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		7BBDE387181983E700D1A0AC /* NodelikeMacDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NodelikeMacDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		7BBDE38E181983E700D1A0AC /* NodelikeMacDemoTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NodelikeMacDemoTests-Info.plist"; sourceTree = "<group>"; };
-		7BBDE390181983E700D1A0AC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		7BBDE392181983E700D1A0AC /* NodelikeMacDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NodelikeMacDemoTests.m; sourceTree = "<group>"; };
 		7BCEA7A61821CCCA00835225 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/WebKit.framework; sourceTree = DEVELOPER_DIR; };
 		7BF86D78181988180067D43E /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 		7BF86D7A181988700067D43E /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = /System/Library/Frameworks/JavaScriptCore.framework; sourceTree = "<absolute>"; };
@@ -485,24 +479,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		7BBDE38C181983E700D1A0AC /* NodelikeMacDemoTests */ = {
-			isa = PBXGroup;
-			children = (
-				7BBDE392181983E700D1A0AC /* NodelikeMacDemoTests.m */,
-				7BBDE38D181983E700D1A0AC /* Supporting Files */,
-			);
-			path = NodelikeMacDemoTests;
-			sourceTree = "<group>";
-		};
-		7BBDE38D181983E700D1A0AC /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				7BBDE38E181983E700D1A0AC /* NodelikeMacDemoTests-Info.plist */,
-				7BBDE38F181983E700D1A0AC /* InfoPlist.strings */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		B537A603180C71FF00CEF23D /* lib */ = {
 			isa = PBXGroup;
 			children = (
@@ -676,7 +652,6 @@
 				B59EA090180CB587005BF5C1 /* Nodelike */,
 				B5B44648180AB78E009ADEF9 /* NodelikeDemo */,
 				7BBDE36F181983E600D1A0AC /* NodelikeMacDemo */,
-				7BBDE38C181983E700D1A0AC /* NodelikeMacDemoTests */,
 				B5B44641180AB78E009ADEF9 /* Frameworks */,
 				B5B44640180AB78E009ADEF9 /* Products */,
 			);
@@ -929,7 +904,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7BBDE391181983E700D1A0AC /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1033,7 +1007,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = ". ~/dotfiles/osx.sh\n\ninstallonipad \"${CODESIGNING_FOLDER_PATH}\" | logger\n";
+			shellScript = "#. ~/dotfiles/osx.sh\n#installonipad \"${CODESIGNING_FOLDER_PATH}\" | logger\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1087,7 +1061,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7BBDE393181983E700D1A0AC /* NodelikeMacDemoTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1148,7 +1121,6 @@
 				B5B44659180AB78E009ADEF9 /* NLViewController.m in Sources */,
 				B5B44653180AB78E009ADEF9 /* NLAppDelegate.m in Sources */,
 				B5B4464F180AB78E009ADEF9 /* main.m in Sources */,
-				B5061A33181595EB0083AB4B /* index.js in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1179,14 +1151,6 @@
 				7BBDE37F181983E700D1A0AC /* Base */,
 			);
 			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-		7BBDE38F181983E700D1A0AC /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				7BBDE390181983E700D1A0AC /* en */,
-			);
-			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 		B5B4464B180AB78E009ADEF9 /* InfoPlist.strings */ = {

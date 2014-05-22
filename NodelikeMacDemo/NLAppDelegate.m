@@ -1,84 +1,85 @@
-
 /*  NLAppDelegate.m  NodelikeMacDemo
 		Created by Alex Gray on 10/24/13. Copyright (c) 2013 Sam Rijs. All rights reserved. */
 
+//  @property (NA)					   NSString * evalString;
+//	[_variables.mainFrame bind:@"stringValue" toObject:self withKeyPath:@"resultString" options:nil]; 
+
 #import "NLAppDelegate.h"
-#import "Nodelike.h"
 
-#define		 NODE(X)		[NSTreeNode treeNodeWithRepresentedObject:X]
-#define OBSERVE(X,Y) 	[NSNotificationCenter.defaultCenter addObserverForName:X object:nil queue:NSOperationQueue.mainQueue \
-																																  usingBlock:^(NSNotification *note) { Y }]
-												 @interface   NLAppDelegate ()
-@property							    NLContext * context;
-//@property (NA)					   NSString * evalString;
-@property (WK) IBO    NSOutlineView * outline;			// The drawer view that holds the clickable built-ins for testing.
-@property (WK) IBO NSTreeController * cmdTree; @end
-
-                    @implementation   NLAppDelegate
+@implementation   NLAppDelegate
 
 - (void) awakeFromNib {	[_window.drawers[0] open];  // Open drawer on window.
 
-//	[_variables.mainFrame bind:@"stringValue" toObject:self withKeyPath:@"resultString" options:nil]; 
-	__block NSTextView *log_ = _log; _context = [NLContext.alloc initWithVirtualMachine:JSVirtualMachine.new];  // setup JSVirtualMachine.  woohoo.
-
+  // setup JSVirtualMachine.  woohoo.
+  _context = [NLContext.alloc initWithVirtualMachine:JSVirtualMachine.new];
 	_interpretation = [JSValue valueWithObject:@"_" inContext:_context];
-	[_variables.mainFrame.DOMDocument bind:@"nodeValue" toObject:_interpretation withKeyPath:@"toString" options:@{NSNullPlaceholderBindingOption:NSNull.null}];
+
+	[_variables.mainFrame.DOMDocument bind:@"nodeValue"
+                                toObject:_interpretation withKeyPath:@"toString"
+                                 options:@{NSNullPlaceholderBindingOption:NSNull.null}];
+
+	__block NSTextView *log_  = _log;
+  _context.exceptionHandler = ^(JSContext *c, JSValue *e) {
+    log_.string = [log_.string stringByAppendingFormat:@"\n%@",e]; NSLog(@"%@", e);
+  };
 
 //	[self bind:@"resultString" toObject:self withKeyPath:@"interpretation" options:@{NSNullPlaceholderBindingOption:NSNull.null}];
 
-	_context.exceptionHandler = ^(JSContext *c, JSValue *e) { log_.string = [log_.string stringByAppendingFormat:@"\n%@",e]; NSLog(@"%@", e); };
+  OBSERVE(NSTextDidChangeNotification, ({ // detect return and semicolons...  then RUN!
 
-OBSERVE(NSTextDidChangeNotification, ({ NSTextView*txtV; [(txtV = note.object).enclosingScrollView scrollPoint:txtV.frame.origin];
+    NSTextView * txtV = note.object;
+    NSString    * txt = txtV.textStorage.string;
 
-		NSString *txt = txtV.textStorage.string;  // stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    [txtV.enclosingScrollView scrollPoint:txtV.frame.origin];
 
-		if (![[txt substringWithRange:NSMakeRange(txt.length-1,1)] isEqualToString:@";"]) return;
-			NSLog(@"txt: %@",txt);
-			NSLog(@"mainframe... %@", [_variables.mainFrame.DOMDocument childNodes]);
+    if(!txt.length || txt.isOnlyWhitespace || ![txt containsSet:JSSENTINEL inRange:(NSRange){txt.length-1,1}]) return;
+
+			NSLog(@"txt:%@mainframe... %@", txt, _variables.mainFrame.DOMDocument.childNodes);
+
 			[_context requireModule:@"index"];
-			//[_context requireModule:@"http"];
-//			[self willChangeValueForKey:@"resultString"];
-//			id rand = @(arc4random() %500).stringValue;
-			self.interpretation = [_context evaluateScript:txt];
-			[_variables.mainFrame loadHTMLString:
-				[[[_variables.mainFrame DOMDocument]body].innerHTML stringByAppendingFormat:@"<div style='background-color:rgba(%@,%@,%@, 1);'>%@</div>"
+      self.interpretation = [_context evaluateScript:txt];
+      [_variables.mainFrame loadHTMLString:
+				[[_variables.mainFrame.DOMDocument body].innerHTML stringByAppendingFormat:@"<div style='background-color:rgba(%@,%@,%@, 1);'>%@</div>"
 																	,@(arc4random() %255),@(arc4random() %255), @(arc4random() %255), _interpretation.toString] baseURL:nil];
 			[_variables.windowScriptObject evaluateWebScript:@"window.scrollTo(0, document.body.scrollHeight);"];
 
-//			[self didChangeValueForKey:@"resultString"];
 }););}
+//[_context requireModule:@"http"];
+//			[self willChangeValueForKey:@"resultString"];
+//			id rand = @(arc4random() %500).stringValue;
+//			[self didChangeValueForKey:@"resultString"];
 
+- (NSString*) selectedOutlineItem:(NSOutlineView*)v { return [[[v itemAtRow:v.selectedRow]representedObject]representedObject]; }
 
-
-//- (void) setEvalString:		    (NSString*)evalString		{	//	This is the "keyPath" that "Affects" ResultString.
-// } //	Aka you change this.. and KVO updates the dependent (readonly) resultstring.
-																												//		NSString *res = ;	NSLog(@"got res: %@", res);	[self appendString:[@"_ = " stringByAppendingString:res] toView:_result];
 - (IBAction) insertCommand:(id)tableSender {
-	[_console insertText:[NSAttributedString.alloc initWithString:[[[tableSender itemAtRow:((NSOutlineView*)tableSender).selectedRow]representedObject]representedObject]
-																										 attributes:@{NSFontNameAttribute:_font}]];
+	[_console insertText:[NSAttributedString.alloc initWithString:[self selectedOutlineItem:tableSender] attributes:@{NSFontNameAttribute:_font}]];
 }
-- (NSMutableArray*) cmds { return _cmds = _cmds ?: ^{ _cmds	= NSMutableArray.new;	// tree controller's "content" set in IB
+- (NSArray*) cmds { static NSMutableArray *_cmds;
 
-// Only doig these UI setup things HERE... because there's a good chance this will only get called once..
+  return _cmds ?: ^{ _cmds	= NSMutableArray.new;	// tree controller's "content" set in IB
+
+    // Only doing these UI setup things HERE... because there's a good chance this will only get called once..
 		_console.textColor	= _log.textColor	=	 _console.insertionPointColor = NSColor.whiteColor;
 		_console.font				= _font						= [NSFont fontWithName:@"AmericanTypewriter" size:22];
 													_log.font				= [NSFont fontWithName:@"AmericanTypewriter" size:15];  // end UI silliness.
-		InjectCSS(GRIDLYCSS,_variables);
+		[_variables injectCSS:GRIDLYCSS];
 		[_variables.windowScriptObject evaluateWebScript:[NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://mrgray.com/jq"] encoding:NSUTF8StringEncoding error:nil]];
 
-		__block NSTreeNode *node;	// Reuse this var as we build a tree of nodes.. of "available" node commands.. in the outline view.
+    // Reuse this var as we build a tree of nodes.. of "available" node commands.. in the outline view.
+		__block NSTreeNode *node;
 
 		// this is just a block helper to add a bunch of child nodes under a group, like process, ad its subcommands.
 
-		void(^add)(NSArray *objs)	= ^(NSArray *z) { for (id x in z) [node.mutableChildNodes addObject:NODE(x)]; };
+		void(^add)(NSArray*)	= ^(NSArray *z) { for (id x in z) [node.mutableChildNodes addObject:NODEWITH(x)]; };
 
-		node = NODE(@"process");	add(@[@".cwd()",@".chdir()",@".argv",@".env",@".exit()",@".nextTick()"]); // adds to node.
-		[_cmds addObject:node];																								// add too array.
-		[_cmds addObject:NODE(@"require()")];																	// new single item node.
-							node = NODE(@"fs");	add(@[@"open", @"close", @"readdir"]);  // new multi-item node.
+		node = NODEWITH(@"process");	add(@[@".cwd()",@".chdir()",@".argv",@".env",@".exit()",@".nextTick()"]); // adds to node.
+		[_cmds addObject:node];                                                   // add too array.
+		[_cmds addObject:NODEWITH(@"require()")];																	// new single item node.
+							node = NODEWITH(@"fs");	add(@[@"open", @"close", @"readdir"]);  // new multi-item node.
 		[_cmds addObject:node];																								// add multi-item to array
-		[_cmds addObjectsFromArray:@[	NODE(@"util"),		NODE(@"url"),					NODE(@"events"),		NODE(@"path"),
-																	NODE(@"stream"),	NODE(@"querystring"), NODE(@"punycode"),	NODE(@"assert")]];
+		[_cmds addObjectsFromArray:@[	NODEWITH(@"util"),    NODEWITH(@"url"),       NODEWITH(@"events"),
+                                  NODEWITH(@"path"),    NODEWITH(@"stream"),    NODEWITH(@"querystring"),
+                                  NODEWITH(@"assert"),  NODEWITH(@"punycode")]];
 
 		return _cmds;	// return our commands array.. which was why we ended up in this big block to begin with.
 	}();
@@ -99,6 +100,33 @@ OBSERVE(NSTextDidChangeNotification, ({ NSTextView*txtV; [(txtV = note.object).e
 @end
 
 int main(int argc, const char * argv[])	{	return NSApplicationMain(argc, argv);	}
+
+
+
+@implementation WebView (CSS)
+- (void) injectCSS:(NSString*)css {
+
+  DOMDocument  * domD = self.mainFrameDocument;
+  DOMElement * styleE = [domD createElement:@"style"];
+
+	[styleE setAttribute:@"type" value:@"text/css"];
+  [styleE appendChild:[domD createTextNode:css]];
+  [[[domD getElementsByTagName:@"head"] item:0] appendChild:styleE]; // head
+}
+@end
+
+@implementation NSString (InRange)
+- (BOOL) containsSet:(NSCharacterSet*)set inRange:(NSRange)r {
+
+    return [[self substringWithRange:r] rangeOfCharacterFromSet:set].location != NSNotFound;
+
+}
+- (BOOL) isOnlyWhitespace {
+  return ![self stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet].length;
+}
+@end
+
+
 
 //
 //		if ([cmd isKindOfClass:NSString.class]) [_commandContent addObject:[NSTreeNode treeNodeWithRepresentedObject:cmd]];
@@ -177,3 +205,7 @@ int main(int argc, const char * argv[])	{	return NSApplicationMain(argc, argv);	
 //	[_ov reloadData];
 
 
+
+//- (void) setEvalString:		    (NSString*)evalString		{	//	This is the "keyPath" that "Affects" ResultString.
+// } //	Aka you change this.. and KVO updates the dependent (readonly) resultstring.
+																												//		NSString *res = ;	NSLog(@"got res: %@", res);	[self appendString:[@"_ = " stringByAppendingString:res] toView:_result];
